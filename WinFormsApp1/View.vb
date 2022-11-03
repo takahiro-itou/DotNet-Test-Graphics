@@ -73,10 +73,18 @@
     Public Sub DrawTextOn(ByRef utViewInfo As ViewInfo, ByVal strText As String)
 
         Dim gCanvas As System.Drawing.Graphics
+        Dim srcRect As System.Drawing.Rectangle
 
         With utViewInfo
             gCanvas = System.Drawing.Graphics.FromImage(.imgCanvas)
             gCanvas.FillRectangle(Brushes.Yellow, gCanvas.VisibleClipBounds)
+
+            ' アイコンを転送する
+            srcRect = New System.Drawing.Rectangle(0, 0, 16, 16)
+            gCanvas.DrawImage(.imgIcons, 32, 32, srcRect, GraphicsUnit.Pixel)
+
+            ' 最後に表示用のピクチャーボックスに転送する
+            .gView.DrawImage(.imgCanvas, 0, 0)
         End With
 
     End Sub
