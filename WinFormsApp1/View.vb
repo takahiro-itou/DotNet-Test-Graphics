@@ -3,7 +3,7 @@
     Public Structure ViewInfo
         Public gView As System.Drawing.Graphics
         Public imgCanvas As System.Drawing.Bitmap
-        Public imgIcons As System.Drawing.Image
+        Public imgIcons As System.Drawing.Bitmap
     End Structure
 
     Public Const SRCAND As Integer = &H8800C6
@@ -27,6 +27,10 @@
     Public Function DeleteDC(ByVal hDC As IntPtr) As Integer
     End Function
 
+    <Runtime.InteropServices.DllImport("gdi32.dll")>
+    Public Function SelectObject(ByVal hDC As IntPtr, ByVal hGdiObj As IntPtr) As IntPtr
+    End Function
+
     Public Function getAppPath() As String
         ''--------------------------------------------------------------------
         ''    アプリケーションの実行ディレクトリを取得する。
@@ -40,7 +44,6 @@
     End Function
 
     Public Sub LoadResources(ByVal baseDir As String, ByRef utViewInfo As ViewInfo)
-        Dim strDir As String
 
         With utViewInfo
             .imgIcons = New System.Drawing.Bitmap(baseDir & "\Icons.bmp")
@@ -94,19 +97,41 @@
     Public Sub DrawTextOn(ByRef utViewInfo As ViewInfo, ByVal strText As String)
 
         Dim gCanvas As System.Drawing.Graphics
-        Dim srcRect As System.Drawing.Rectangle
+        Dim gIcons As System.Drawing.Graphics
+        Dim destX As Integer, destY As Integer
+        Dim copyWidth As Integer, copyHeight As Integer
+        Dim srcX As Integer, srcY As Integer
+        Dim hdcSrc As IntPtr, hdcDst As IntPtr, hobjOld As IntPtr
 
         With utViewInfo
             gCanvas = System.Drawing.Graphics.FromImage(.imgCanvas)
-            gCanvas.FillRectangle(Brushes.Yellow, gCanvas.VisibleClipBounds)
+            gIcons = System.Drawing.Graphics.FromImage(.imgIcons)
+
+            gCanvas.FillRectangle(Brushes.Gray, gCanvas.VisibleClipBounds)
 
             ' アイコンを転送する
-            srcRect = New System.Drawing.Rectangle(0, 0, 16, 16)
-            gCanvas.DrawImage(.imgIcons, 32, 32, srcRect, GraphicsUnit.Pixel)
+            destX = 32
+            destY = 32
+            copyWidth = 16
+            copyHeight = 16
+            srcX = 16
+            srcY = 0
+
+            hdcDst = gCanvas.GetHdc()
+            hdcSrc = CreateCompatibleDC(hdcDst)
+            hobjOld = SelectObject(hdcSrc, .imgIcons.GetHbitmap())
+            BitBlt(hdcDst, destX, destY, copyWidth, copyHeight, hdcSrc, srcX, srcY + 16, SRCAND)
+            BitBlt(hdcDst, destX, destY, copyWidth, copyHeight, hdcSrc, srcX, srcY, SRCPAINT)
+
+            DeleteDC(hdcSrc)
+            gCanvas.ReleaseHdc(hdcDst)
 
             ' 最後に表示用のピクチャーボックスに転送する
             .gView.DrawImage(.imgCanvas, 0, 0)
         End With
+
+        gCanvas.Dispose()
+        gIcons.Dispose()
 
     End Sub
 
