@@ -6,6 +6,27 @@
         Public imgIcons As System.Drawing.Image
     End Structure
 
+    Public Const SRCAND As Integer = &H8800C6
+    Public Const SRCCOPY As Integer = &HCC0020
+    Public Const SRCPAINT As Integer = &HEE0086
+
+    <Runtime.InteropServices.DllImport("gdi32.dll")>
+    Public Function BitBlt(ByVal hDestDC As IntPtr,
+                       ByVal X As Integer, ByVal Y As Integer,
+                       ByVal nWidth As Integer, ByVal nHeight As Integer,
+                       ByVal hSrcDC As IntPtr,
+                       ByVal xSrc As Integer, ByVal ySrc As Integer,
+                       ByVal dwRop As Integer) As Integer
+    End Function
+
+    <Runtime.InteropServices.DllImport("gdi32.dll")>
+    Public Function CreateCompatibleDC(ByVal hDC As IntPtr) As IntPtr
+    End Function
+
+    <Runtime.InteropServices.DllImport("gdi32.dll")>
+    Public Function DeleteDC(ByVal hDC As IntPtr) As Integer
+    End Function
+
     Public Function getAppPath() As String
         ''--------------------------------------------------------------------
         ''    アプリケーションの実行ディレクトリを取得する。
