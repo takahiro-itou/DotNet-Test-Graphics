@@ -94,7 +94,7 @@
 
     End Function
 
-    Public Sub DrawTextOn(ByRef utViewInfo As ViewInfo, ByVal strText As String)
+    Public Sub DrawTextOn(ByRef utViewInfo As ViewInfo, ByVal strText As String, ByRef fnt As Font)
 
         Dim gCanvas As System.Drawing.Graphics
         Dim gIcons As System.Drawing.Graphics
@@ -107,7 +107,7 @@
             gCanvas = System.Drawing.Graphics.FromImage(.imgCanvas)
             gIcons = System.Drawing.Graphics.FromImage(.imgIcons)
 
-            gCanvas.FillRectangle(Brushes.Gray, gCanvas.VisibleClipBounds)
+            gCanvas.FillRectangle(Brushes.LightGray, gCanvas.VisibleClipBounds)
 
             ' アイコンを転送する
             destX = 32
@@ -125,6 +125,8 @@
 
             DeleteDC(hdcSrc)
             gCanvas.ReleaseHdc(hdcDst)
+
+            gCanvas.DrawString(strText, fnt, Brushes.Red, destX + 32, destY)
 
             ' 最後に表示用のピクチャーボックスに転送する
             .gView.DrawImage(.imgCanvas, 0, 0)

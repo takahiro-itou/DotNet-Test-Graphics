@@ -12,7 +12,7 @@
     End Sub
 
     Private Sub btnDraw_Click(sender As Object, e As EventArgs) Handles btnDraw.Click
-        DrawTextOn(utViewInfo, Me.TextBox1.Text)
+        DrawTextOn(utViewInfo, Me.TextBox1.Text, Me.picView.Font)
         Me.picView.Invalidate()
     End Sub
 End Class
