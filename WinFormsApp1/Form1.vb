@@ -5,8 +5,9 @@
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strDir As String
 
-        strDir = getAppPath()
+        strDir = GetRootDir(getAppPath(), "bin")
         LoadResources(strDir & "\Resource", utViewInfo)
+
         SetupGraphics(Me.picView, utViewInfo)
     End Sub
 

@@ -5,6 +5,7 @@
         Public imgCanvas As System.Drawing.Bitmap
         Public imgIcons As System.Drawing.Image
     End Structure
+
     Public Function getAppPath() As String
         ''--------------------------------------------------------------------
         ''    アプリケーションの実行ディレクトリを取得する。
@@ -40,6 +41,28 @@
         End With
 
     End Sub
+
+    Public Function GetRootDir(ByVal strFullPath As String, ByVal stripDir As String) As String
+
+        Dim strWorkPath As String
+        Dim strDir As String
+        Dim strFile As String
+
+        strWorkPath = strFullPath
+
+        While strWorkPath <> ""
+            strDir = System.IO.Path.GetDirectoryName(strFullPath)
+            strFile = System.IO.Path.GetFileName(strFullPath)
+            If strFile = stripDir Then
+                GetRootDir = strFile
+                Exit Function
+            End If
+            strWorkPath = strDir
+        End While
+
+        GetRootDir = strFullPath
+
+    End Function
 
     Public Sub DrawTextOn(ByRef utViewInfo As ViewInfo, ByVal strText As String)
 
