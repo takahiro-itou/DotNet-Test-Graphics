@@ -3,7 +3,10 @@
     Private utViewInfo As ViewInfo
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadResources("Resource", utViewInfo)
+        Dim strDir As String
+
+        strDir = getAppPath()
+        LoadResources(strDir & "\Resource", utViewInfo)
         SetupGraphics(Me.picView, utViewInfo)
     End Sub
 

@@ -5,8 +5,20 @@
         Public imgCanvas As System.Drawing.Bitmap
         Public imgIcons As System.Drawing.Image
     End Structure
+    Public Function getAppPath() As String
+        ''--------------------------------------------------------------------
+        ''    アプリケーションの実行ディレクトリを取得する。
+        ''--------------------------------------------------------------------
+        Dim strDir As String
+
+        strDir = System.IO.Path.GetDirectoryName(
+            System.Reflection.Assembly.GetExecutingAssembly().Location)
+        getAppPath = strDir
+
+    End Function
 
     Public Sub LoadResources(ByVal baseDir As String, ByRef utViewInfo As ViewInfo)
+        Dim strDir As String
 
         With utViewInfo
             .imgIcons = New System.Drawing.Bitmap(baseDir & "\Icons.bmp")
