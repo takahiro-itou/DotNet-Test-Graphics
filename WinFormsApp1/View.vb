@@ -31,6 +31,12 @@
         Dim w As Int32
         Dim h As Int32
 
+        With picView
+            If .Image Is Nothing Then
+                .Image = New System.Drawing.Bitmap(.Width, .Height)
+            End If
+        End With
+
         With utViewInfo
             .gView = System.Drawing.Graphics.FromImage(picView.Image)
             With .gView.VisibleClipBounds
@@ -51,10 +57,10 @@
         strWorkPath = strFullPath
 
         While strWorkPath <> ""
-            strDir = System.IO.Path.GetDirectoryName(strFullPath)
-            strFile = System.IO.Path.GetFileName(strFullPath)
+            strDir = System.IO.Path.GetDirectoryName(strWorkPath)
+            strFile = System.IO.Path.GetFileName(strWorkPath)
             If strFile = stripDir Then
-                GetRootDir = strFile
+                GetRootDir = strDir
                 Exit Function
             End If
             strWorkPath = strDir
